@@ -1,7 +1,7 @@
-from binarytree import Node as leave_tree
+from binarytree import Node as Tree
 
 
-class node:
+class Node:
     def __init__(self, value: list):
         self.left = None
         self.right = None
@@ -14,7 +14,7 @@ class node:
         self.right = val
 
 
-class local_alignment:
+class LocalAlignment:
     """
     input: two string: a, b
     ----------
@@ -58,11 +58,11 @@ class local_alignment:
 
         return [i, D.index(max(D))]
 
-    def _hirshberg(self, a: str, b: str, leave: node):
+    def _hirshberg(self, a: str, b: str, leave: Node):
         i, j = self._one_iteration_of_hirshberg(a, b)
-        left = node([[leave.value[0][0], leave.value[0][0] + i], [leave.value[1][0], leave.value[1][0] + j]])
+        left = Node([[leave.value[0][0], leave.value[0][0] + i], [leave.value[1][0], leave.value[1][0] + j]])
         leave.add_left(left)
-        right = node([[leave.value[0][0] + i, leave.value[0][1]], [leave.value[1][0] + j, leave.value[1][1]]])
+        right = Node([[leave.value[0][0] + i, leave.value[0][1]], [leave.value[1][0] + j, leave.value[1][1]]])
         leave.add_right(right)
 
         if len(b[:j]) > 1 and len(a[:i]) > 1:
@@ -72,23 +72,23 @@ class local_alignment:
 
     def start(self, a: str, b: str):
         self.a, self.b = a, b
-        result = node([[0, len(a)], [0, len(b)]])
+        result = Node([[0, len(a)], [0, len(b)]])
         self._parameters()
         self._hirshberg(self.a, self.b, result)
 
         def disp(edge, leave):
             if edge.right is not None:
                 right = edge.right.value
-                leave.right = leave_tree('({0}, {1})'.format(self.a[right[0][0]:right[0][1]], self.b[right[1][0]:right[1][1]]))
+                leave.right = Tree('({0}, {1})'.format(self.a[right[0][0]:right[0][1]], self.b[right[1][0]:right[1][1]]))
                 disp(edge.right, leave.right)
 
             if edge.left is not None:
                 left = edge.left.value
-                leave.left = leave_tree('({0}, {1})'.format(self.a[left[0][0]:left[0][1]], self.b[left[1][0]:left[1][1]]))
+                leave.left = Tree('({0}, {1})'.format(self.a[left[0][0]:left[0][1]], self.b[left[1][0]:left[1][1]]))
                 disp(edge.left, leave.left)
 
         root = result.value
-        tree = leave_tree('({0}, {1})'.format(self.a[root[0][0]:root[0][1]], self.b[root[1][0]:root[1][1]]))
+        tree = Tree('({0}, {1})'.format(self.a[root[0][0]:root[0][1]], self.b[root[1][0]:root[1][1]]))
         disp(result, tree)
         print(tree)
 
@@ -97,6 +97,6 @@ if __name__ == "__main__":
     s1, s2 = 'GATTACA', 'AAGAGTAC'
     a = 'AGTACGCA'
     b = 'TATGC'
-    loc_al = local_alignment()
+    loc_al = LocalAlignment()
     loc_al.start(a, b)
     loc_al.start(s1, s2)
