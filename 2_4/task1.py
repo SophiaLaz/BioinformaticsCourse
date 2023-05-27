@@ -1,6 +1,7 @@
 from io import StringIO
 from Bio import Phylo
 from typing import Any, Dict
+import random
 
 
 def fill_internal_nodes(tree: Phylo.BaseTree) -> Phylo.BaseTree:
@@ -12,7 +13,9 @@ def fill_internal_nodes(tree: Phylo.BaseTree) -> Phylo.BaseTree:
             counts: Dict[Any, int] = {}
             for child in clade.clades:
                 counts[child.name] = counts.get(child.name, 0) + 1
-            clade.name = max(counts, key=counts.get)
+            max_count = max(counts.values())
+            most_common_names = [name for name, count in counts.items() if count == max_count]
+            clade.name = random.choice(most_common_names)
 
     return tree
 
